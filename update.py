@@ -1,9 +1,14 @@
 import os
 import pandas as pd
 
-# re-download data
+### data updates ###
+
+# single-cell database
 os.system('rm data.tsv')
 os.system('wget http://www.nxn.se/single-cell-studies/data.tsv')
+
+# GDSC
+#os.system('wget -P /gdsc/ ftp://ftp.sanger.ac.uk/pub/project/cancerrxgene/releases/current_release/GDSC1_fitted_dose_response_25Feb20.xlsx')
 
 dois = [
 ### CRISPR ###
