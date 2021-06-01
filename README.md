@@ -1,4 +1,4 @@
-# `sc-pert` - Machine learning for perturbational single-cell omics
+# sc-pert - Machine learning for perturbational single-cell omics
 
 *This repository provides a community-maintained summary of models and datasets. It was initially curated for [(Cell Systems, 2021)](https://doi.org/10.1016/j.cels.2021.05.016).*
 
