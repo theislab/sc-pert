@@ -5,6 +5,9 @@ def GDSC_response(cell_line, filename=None):
     """Downloads and returns the responsiveness ranking of compounds
     for a specific cell line from GDSC1 and GDSC2 as dataframes.
 
+    Descriptions of the column names can be found
+    here: ftp://ftp.sanger.ac.uk/pub/project/cancerrxgene/releases/current_release/GDSC_Fitted_Data_Description.pdf
+
     Params
     ------
     cell_line : str
