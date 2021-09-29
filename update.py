@@ -39,7 +39,7 @@ df = df[df.DOI.isin(dois)]
 # convert DOIs to links in markdown
 links = []
 for shorthand, link in df[['Shorthand', 'DOI']].values:
-    s = f'[{shorthand}](doi.org/{link})'
+    s = f'[{shorthand}](https://doi.org/{link})'
     s = s.replace('et al', '*et al.*')
     links.append(s)
 df['Shorthand'] = links
