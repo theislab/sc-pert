@@ -13,10 +13,26 @@ os.system("wget --no-check-certificate -O personal.csv 'https://docs.google.com/
 #os.system('wget -P /gdsc/ ftp://ftp.sanger.ac.uk/pub/project/cancerrxgene/releases/current_release/GDSC1_fitted_dose_response_25Feb20.xlsx')
 
 personal_rec = pd.read_csv('personal.csv')
-dois = personal_rec['DOI'].values
+dois = personal_rec.DOI.values
 
 df = pd.read_csv('data.tsv', sep='\t')
 df = df[df.DOI.isin(dois)]
+not_in_db = list(set(dois) - set(df.DOI.values))
+
+# create placeholders for dois not in the sc studies DB
+pdf = personal_rec[personal_rec.DOI.isin(not_in_db)]
+df = df.append(pdf[pdf.columns.intersection(df.columns)])
+
+# add additional columns of info
+add_cols = personal_rec[['DOI', 'Treatment', '# perturbations', '# cell types', '# doses', '# timepoints']]
+n_cols = 1 - add_cols.shape[1]  # default to negative
+df = df.merge(
+    add_cols,
+    left_on='DOI',
+    right_on='DOI'
+)
+df = df[list(df.columns[:5]) + \
+    list(df.columns[n_cols:]) + list(df.columns[5:n_cols])] # up to `Title`
 
 # convert DOIs to links in markdown
 links = []
@@ -25,7 +41,10 @@ for shorthand, link in df[['Shorthand', 'DOI']].values:
     s = s.replace('et al', '*et al.*')
     links.append(s)
 df['Shorthand'] = links
+
+# clean up
 df = df.drop(['Authors', 'Journal', 'DOI', 'bioRxiv DOI'], axis=1)
+df = df.sort_values(by=['Treatment', 'Date'])
 
 # write README
 filenames = []
