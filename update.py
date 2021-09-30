@@ -5,33 +5,15 @@ import pandas as pd
 
 # single-cell database
 os.system('rm data.tsv')
+os.system('rm personal.csv')
 os.system('wget http://www.nxn.se/single-cell-studies/data.tsv')
+os.system("wget --no-check-certificate -O personal.csv 'https://docs.google.com/spreadsheets/d/14awt-bCOnj4ca2uoKzuTNuKtUKXcoN82_-oGg2f1Ros/export?gid=1438063781&format=csv'")
 
 # GDSC
 #os.system('wget -P /gdsc/ ftp://ftp.sanger.ac.uk/pub/project/cancerrxgene/releases/current_release/GDSC1_fitted_dose_response_25Feb20.xlsx')
 
-dois = [
-### CRISPR ###
-    '10.1016/j.cell.2016.11.038',  # Dixit 2016
-    '10.1016/j.cell.2016.11.048',  # Adamson 2016
-    '10.1126/science.1247651',     # Jaitin 2016
-    '10.1038/nmeth.4177',          # Datlinger 2017
-    '10.1038/nmeth.4604',          # Hill 2018
-    '10.1016/j.cell.2018.11.029',  # Gasperini 2019
-    # Norman 2019
-    '10.1038/s41592-020-0837-5',   # Schraivogel 2020
-    # Josh 2020
-    '10.1101/2020.11.16.383307',   # Ursu 2020
-    '10.1101/791525',              # Jin 2020
-    '10.1038/s41588-021-00779-1',  # Frangieh 2021
-### small molecules ### 
-    '10.1126/science.aax6234',     # Srivatsan 2019
-    '10.1126/sciadv.aav2249',      # Shin 2019
-    '10.1101/868752',              # McFarland 2020
-    # PhEMD dataset (Chen 2020) - cytobank
-    '10.1101/2020.04.22.056341',   # Zhao 2020
-    '10.1038/s41592-021-01153-z',  # Datlinger 2021
-]
+personal_rec = pd.read_csv('personal.csv')
+dois = personal_rec['DOI'].values
 
 df = pd.read_csv('data.tsv', sep='\t')
 df = df[df.DOI.isin(dois)]
