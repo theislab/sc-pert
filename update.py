@@ -57,3 +57,5 @@ with open('README.md', 'w') as outfile:
         outfile.write(md)
         infile.close()
     outfile.close()
+
+df.to_csv('data_table.csv')

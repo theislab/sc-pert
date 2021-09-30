@@ -18,4 +18,4 @@ For the basis of the table in the article, see this [spreadsheet of a subset of 
 
 ### Datasets
 
-Below, we curated a table of perturbation datasets based on [Svensson *et al.* (2020)](https://doi.org/10.1093/database/baaa073).
+Below, we curated a [table](https://raw.githubusercontent.com/theislab/sc-pert/main/data_table.csv) of perturbation datasets based on [Svensson *et al.* (2020)](https://doi.org/10.1093/database/baaa073).
