@@ -52,7 +52,7 @@ filenames = []
 with open('README.md', 'w') as outfile:
     with open('readme_body.txt') as infile:
         outfile.write(infile.read())
-        md = df.to_markdown(index=False, tablefmt='github')
+        md = df.to_markdown(index=False, tablefmt='github', floatfmt='.8g')
         md = md.replace('| Title', '| Title'+'&nbsp;'*100)
         outfile.write(md)
         infile.close()
