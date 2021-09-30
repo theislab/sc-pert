@@ -17,6 +17,7 @@ dois = personal_rec.DOI.values
 
 df = pd.read_csv('data.tsv', sep='\t')
 df = df[df.DOI.isin(dois)]
+df['Date'] = df['Date'].astype('object')  # ensure proper display
 not_in_db = list(set(dois) - set(df.DOI.values))
 
 # create placeholders for dois not in the sc studies DB
