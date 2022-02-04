@@ -1,4 +1,5 @@
 import os
+import glob
 import pandas as pd
 
 ### data updates ###
@@ -11,6 +12,8 @@ os.system("wget --no-check-certificate -O personal.csv 'https://docs.google.com/
 
 # GDSC
 #os.system('wget -P /gdsc/ ftp://ftp.sanger.ac.uk/pub/project/cancerrxgene/releases/current_release/GDSC1_fitted_dose_response_25Feb20.xlsx')
+
+curated_datasets = [file.split('.')[0] for file in glob.glob('*.ipynb')]
 
 personal_rec = pd.read_csv('personal.csv')
 dois = personal_rec.DOI.values
@@ -25,7 +28,7 @@ pdf = personal_rec[personal_rec.DOI.isin(not_in_db)]
 df = df.append(pdf[pdf.columns.intersection(df.columns)])
 
 # add additional columns of info
-add_cols = personal_rec[['DOI', 'Treatment', '# perturbations', '# cell types', '# doses', '# timepoints']]
+add_cols = personal_rec[['DOI', 'Treatment', '# perturbations', '# cell types', '# doses', '# timepoints', 'Author', 'Year']]
 n_cols = 1 - add_cols.shape[1]  # default to negative
 df = df.merge(
     add_cols,
@@ -33,18 +36,23 @@ df = df.merge(
     right_on='DOI'
 )
 df = df[list(df.columns[:5]) + \
-    list(df.columns[n_cols:]) + list(df.columns[5:n_cols])] # up to `Title`
+    list(df.columns[n_cols:]) + list(df.columns[5:n_cols])]  # up to `Title`
 
 # convert DOIs to links in markdown
 links = []
-for shorthand, link in df[['Shorthand', 'DOI']].values:
+for shorthand, author, year, link in df[['Shorthand', 'Author', 'Year', 'DOI']].values:
     s = f'[{shorthand}](https://doi.org/{link})'
     s = s.replace('et al', '*et al.*')
+
+    # add link to curation notebook for curated datasets
+    if f'{author}_{year}' in curated_datasets:
+        s += f' [nb](https://github.com/theislab/sc-pert/blob/main/{author}_{year}.ipynb)'
+
     links.append(s)
 df['Shorthand'] = links
 
 # clean up
-df = df.drop(['Authors', 'Journal', 'DOI', 'bioRxiv DOI'], axis=1)
+df = df.drop(['Authors', 'Journal', 'DOI', 'bioRxiv DOI', 'Author', 'Year'], axis=1)
 df = df.sort_values(by=['Treatment', 'Date'])
 
 # write README
