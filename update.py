@@ -46,7 +46,7 @@ for shorthand, author, year, link in df[['Shorthand', 'Author', 'Year', 'DOI']].
 
     # add link to curation notebook for curated datasets
     if f'{author}_{year}' in curated_datasets:
-        s += f' [nb](https://github.com/theislab/sc-pert/blob/main/{author}_{year}.ipynb)'
+        s += f' [\[nb\]](https://github.com/theislab/sc-pert/blob/main/datasets/{author}_{year}.ipynb)'
 
     links.append(s)
 df['Shorthand'] = links
