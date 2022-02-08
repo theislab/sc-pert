@@ -1,4 +1,3 @@
-adata = sc.read(f'{author_year}.h5ad')
 # the following fields are meant to serve as a template
 adata.obs['perturbation_name'] = ???
 adata.obs['perturbation_type'] = # 'small molecule' or 'genetic'
