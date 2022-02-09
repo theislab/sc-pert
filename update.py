@@ -14,9 +14,11 @@ os.system("wget --no-check-certificate -O personal.csv 'https://docs.google.com/
 #os.system('wget -P /gdsc/ ftp://ftp.sanger.ac.uk/pub/project/cancerrxgene/releases/current_release/GDSC1_fitted_dose_response_25Feb20.xlsx')
 
 path = 'datasets/'
-curated_datasets = [file.split('.')[0] for file in glob.glob(f'{path}*.ipynb')]
+processed_datasets = [file.split('.')[0] for file in glob.glob(f'{path}*.ipynb') if 'raw' not in file]
+curated_datasets = [file.split('.')[0] for file in glob.glob(f'{path}*_raw.ipynb')]
 
 personal_rec = pd.read_csv('personal.csv')
+personal_rec['author_year'] = personal_rec['Author'] + '_' + personal_rec['Year'].astype(str)
 dois = personal_rec.DOI.values
 
 df = pd.read_csv('data.tsv', sep='\t')
@@ -45,10 +47,16 @@ for shorthand, author, year, link in df[['Shorthand', 'Author', 'Year', 'DOI']].
     s = f'[{shorthand}](https://doi.org/{link})'
     s = s.replace('et al', '*et al.*')
 
-    # add link to .h5ad and curation notebook for curated datasets
-    if f'{path}{author}_{year}' in curated_datasets:
-        s += f' [\\[h5ad\\]](https://ndownloader.figshare.com/files/34002548)'
-        s += f' [\\[nb\\]](https://github.com/theislab/sc-pert/blob/main/datasets/{author}_{year}.ipynb)'
+    ## add links to resources for curated datasets
+    row = personal_rec[personal_rec.author_year == f'{author}_{year}']
+    if not pd.isnull(row.Raw.values[0]):  # raw .h5ad
+        s += f' [\\[raw h5ad\\]]({row.Raw.values[0]})'
+    if not pd.isnull(row.Processed.values[0]):  # processed .h5ad
+        s += f' [\\[processed h5ad\\]]({row.Processed.values[0]})'
+    if f'{path}{author}_{year}_raw' in curated_datasets:  # curation notebook
+        s += f' [\\[curation nb\\]](https://github.com/theislab/sc-pert/blob/main/datasets/{author}_{year}_raw.ipynb)'
+    if f'{path}{author}_{year}' in processed_datasets:  # processing notebook
+        s += f' [\\[processing nb\\]](https://github.com/theislab/sc-pert/blob/main/datasets/{author}_{year}.ipynb)'
 
     links.append(s)
 df['Shorthand'] = links
