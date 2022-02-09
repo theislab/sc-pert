@@ -48,15 +48,16 @@ for shorthand, author, year, link in df[['Shorthand', 'Author', 'Year', 'DOI']].
     s = s.replace('et al', '*et al.*')
 
     ## add links to resources for curated datasets
+    base_nb_path = 'https://nbviewer.ipython.org/github/theislab/sc-pert/blob/main/datasets/'
     row = personal_rec[personal_rec.author_year == f'{author}_{year}']
     if not pd.isnull(row.Raw.values[0]):  # raw .h5ad
         s += f' [\\[raw h5ad\\]]({row.Raw.values[0]})'
     if not pd.isnull(row.Processed.values[0]):  # processed .h5ad
         s += f' [\\[processed h5ad\\]]({row.Processed.values[0]})'
     if f'{path}{author}_{year}_raw' in curated_datasets:  # curation notebook
-        s += f' [\\[curation nb\\]](https://github.com/theislab/sc-pert/blob/main/datasets/{author}_{year}_raw.ipynb)'
+        s += f' [\\[curation nb\\]]({base_nb_path}{author}_{year}_raw.ipynb)'
     if f'{path}{author}_{year}' in processed_datasets:  # processing notebook
-        s += f' [\\[processing nb\\]](https://github.com/theislab/sc-pert/blob/main/datasets/{author}_{year}.ipynb)'
+        s += f' [\\[processing nb\\]]({base_nb_path}{author}_{year}.ipynb)'
 
     links.append(s)
 df['Shorthand'] = links
