@@ -13,7 +13,8 @@ os.system("wget --no-check-certificate -O personal.csv 'https://docs.google.com/
 # GDSC
 #os.system('wget -P /gdsc/ ftp://ftp.sanger.ac.uk/pub/project/cancerrxgene/releases/current_release/GDSC1_fitted_dose_response_25Feb20.xlsx')
 
-curated_datasets = [file.split('.')[0] for file in glob.glob('*.ipynb')]
+path = 'datasets/'
+curated_datasets = [file.split('.')[0] for file in glob.glob(f'{path}*.ipynb')]
 
 personal_rec = pd.read_csv('personal.csv')
 dois = personal_rec.DOI.values
@@ -44,9 +45,10 @@ for shorthand, author, year, link in df[['Shorthand', 'Author', 'Year', 'DOI']].
     s = f'[{shorthand}](https://doi.org/{link})'
     s = s.replace('et al', '*et al.*')
 
-    # add link to curation notebook for curated datasets
-    if f'{author}_{year}' in curated_datasets:
-        s += f' [\[nb\]](https://github.com/theislab/sc-pert/blob/main/datasets/{author}_{year}.ipynb)'
+    # add link to .h5ad and curation notebook for curated datasets
+    if f'{path}{author}_{year}' in curated_datasets:
+        s += f' [\\[h5ad\\]](https://ndownloader.figshare.com/files/34002548)'
+        s += f' [\\[nb\\]](https://github.com/theislab/sc-pert/blob/main/datasets/{author}_{year}.ipynb)'
 
     links.append(s)
 df['Shorthand'] = links
