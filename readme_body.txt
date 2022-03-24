@@ -23,7 +23,9 @@ For the basis of the table in the article, see this [spreadsheet of a subset of 
 Below, we curated a [table](https://raw.githubusercontent.com/theislab/sc-pert/main/data_table.csv) of perturbation datasets based on [Svensson *et al.* (2020)](https://doi.org/10.1093/database/baaa073).
 
 We also offer some datasets in a curated `.h5ad` format. These datasets have the following standardized fields in `.obs`:
-* `perturbation_name`
-* `perturbation_type`
-* `perturbation_value`
-* `perturbation_unit`
+* `perturbation_name` -- Human-readable ompound names (International non-proprietary naming where possible) for small molecules and gene names for genetic perturbations.
+* `perturbation_type` -- `small molecule` or `genetic`
+* `perturbation_value` -- A continuous covariate quantity, such as the dosage concentration or the number of hours since treatment.
+* `perturbation_unit` -- Describes `perturbation_value`, such as `'ug'` or `'hrs'`.
+
+
