@@ -14,8 +14,8 @@ os.system("wget --no-check-certificate -O personal.csv 'https://docs.google.com/
 #os.system('wget -P /gdsc/ ftp://ftp.sanger.ac.uk/pub/project/cancerrxgene/releases/current_release/GDSC1_fitted_dose_response_25Feb20.xlsx')
 
 path = 'datasets/'
-processed_datasets = [file.split('.')[0] for file in glob.glob(f'{path}*.ipynb') if 'raw' not in file]
-curated_datasets = [file.split('.')[0] for file in glob.glob(f'{path}*_raw.ipynb')]
+processed_datasets = [file.split('.')[0] for file in glob.glob(f'{path}*.ipynb') if 'curation' not in file]
+curated_datasets = [file.split('.')[0] for file in glob.glob(f'{path}*_curation.ipynb')]
 
 personal_rec = pd.read_csv('personal.csv')
 personal_rec['author_year'] = personal_rec['Author'] + '_' + personal_rec['Year'].astype(str)
@@ -59,8 +59,8 @@ for shorthand, author, year, link in df[['Shorthand', 'Author', 'Year', 'DOI']].
         s += f' [\\[raw h5ad\\]]({row.Raw.values[0]})'
     if not pd.isnull(row.Processed.values[0]):  # processed .h5ad
         s += f' [\\[processed h5ad\\]]({row.Processed.values[0]})'
-    if f'{path}{author}_{year}_raw' in curated_datasets:  # curation notebook
-        s += f' [\\[curation nb\\]]({base_nb_path}{author}_{year}_raw.ipynb)'
+    if f'{path}{author}_{year}_curation' in curated_datasets:  # curation notebook
+        s += f' [\\[curation nb\\]]({base_nb_path}{author}_{year}_curation.ipynb)'
     if f'{path}{author}_{year}' in processed_datasets:  # processing notebook
         s += f' [\\[processing nb\\]]({base_nb_path}{author}_{year}.ipynb)'
 
