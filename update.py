@@ -68,8 +68,8 @@ for shorthand, author, year, link in df[['Shorthand', 'Author', 'Year', 'DOI']].
 df['.h5ad availability'] = links
 
 # clean up
-df = df.drop(['Authors', 'Journal', 'DOI', 'bioRxiv DOI', 'Author', 'Year'], axis=1)
 df = df.sort_values(by=['Treatment', 'Date'])
+df = df.drop(['Authors', 'Journal', 'DOI', 'bioRxiv DOI', 'Author', 'Year', 'Date'], axis=1)
 
 # rearrange columns
 primary_cols = ['Shorthand', 'Title', '.h5ad availability', 'Treatment', '# perturbations', '# cell types', '# doses', '# timepoints']
