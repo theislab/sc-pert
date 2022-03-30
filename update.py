@@ -43,11 +43,16 @@ df = df[list(df.columns[:5]) + \
 
 # convert DOIs to links in markdown
 links = []
-for shorthand, author, year, link in df[['Shorthand', 'Author', 'Year', 'DOI']].values:
+for shorthand, link in df[['Shorthand', 'DOI']].values:
     s = f'[{shorthand}](https://doi.org/{link})'
     s = s.replace('et al', '*et al.*')
+    links.append(s)
+df['Shorthand'] = links
 
-    ## add links to resources for curated datasets
+# add availability column with download links for curated datasets
+links = []
+for shorthand, author, year, link in df[['Shorthand', 'Author', 'Year', 'DOI']].values:
+    s = ''
     base_nb_path = 'https://nbviewer.ipython.org/github/theislab/sc-pert/blob/main/datasets/'
     row = personal_rec[personal_rec.author_year == f'{author}_{year}']
     if not pd.isnull(row.Raw.values[0]):  # raw .h5ad
@@ -60,11 +65,16 @@ for shorthand, author, year, link in df[['Shorthand', 'Author', 'Year', 'DOI']].
         s += f' [\\[processing nb\\]]({base_nb_path}{author}_{year}.ipynb)'
 
     links.append(s)
-df['Shorthand'] = links
+df['.h5ad availability'] = links
 
 # clean up
 df = df.drop(['Authors', 'Journal', 'DOI', 'bioRxiv DOI', 'Author', 'Year'], axis=1)
 df = df.sort_values(by=['Treatment', 'Date'])
+
+# rearrange columns
+primary_cols = ['Shorthand', 'Title', '.h5ad availability', 'Treatment', '# perturbations', '# cell types', '# doses', '# timepoints']
+df = df[primary_cols + \
+    [c for c in df if c not in primary_cols]]
 
 # write README
 filenames = []
@@ -72,7 +82,7 @@ with open('README.md', 'w') as outfile:
     with open('readme_body.txt') as infile:
         outfile.write(infile.read())
         md = df.to_markdown(index=False, tablefmt='github', floatfmt='.8g')
-        md = md.replace('| Title', '| Title'+'&nbsp;'*100)
+        md = md.replace('| Title', '| Title'+'&nbsp;'*70)
         outfile.write(md)
         infile.close()
     outfile.close()
