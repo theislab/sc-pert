@@ -1,4 +1,5 @@
 import os
+import re
 import glob
 import pandas as pd
 
@@ -14,8 +15,8 @@ os.system("wget --no-check-certificate -O personal.csv 'https://docs.google.com/
 #os.system('wget -P /gdsc/ ftp://ftp.sanger.ac.uk/pub/project/cancerrxgene/releases/current_release/GDSC1_fitted_dose_response_25Feb20.xlsx')
 
 path = 'datasets/'
-processed_datasets = [file.split('.')[0] for file in glob.glob(f'{path}*.ipynb') if 'curation' not in file]
-curated_datasets = [file.split('.')[0] for file in glob.glob(f'{path}*_curation.ipynb')]
+processed_datasets = [file for file in glob.glob(f'{path}*.ipynb') if 'curation' not in file]
+curated_datasets = [file for file in glob.glob(f'{path}*_curation.ipynb')]
 
 personal_rec = pd.read_csv('personal.csv')
 personal_rec['author_year'] = personal_rec['Author'] + '_' + personal_rec['Year'].astype(str)
@@ -53,16 +54,18 @@ df['Shorthand'] = links
 links = []
 for shorthand, author, year, link in df[['Shorthand', 'Author', 'Year', 'DOI']].values:
     s = ''
-    base_nb_path = 'https://nbviewer.ipython.org/github/theislab/sc-pert/blob/main/datasets/'
+    base_nb_path = 'https://nbviewer.ipython.org/github/theislab/sc-pert/blob/main/'
     row = personal_rec[personal_rec.author_year == f'{author}_{year}']
     if not pd.isnull(row.Raw.values[0]):  # raw .h5ad
         s += f' [\\[raw h5ad\\]]({row.Raw.values[0]})'
     if not pd.isnull(row.Processed.values[0]):  # processed .h5ad
         s += f' [\\[processed h5ad\\]]({row.Processed.values[0]})'
-    if f'{path}{author}_{year}_curation' in curated_datasets:  # curation notebook
-        s += f' [\\[curation nb\\]]({base_nb_path}{author}_{year}_curation.ipynb)'
-    if f'{path}{author}_{year}' in processed_datasets:  # processing notebook
-        s += f' [\\[processing nb\\]]({base_nb_path}{author}_{year}.ipynb)'
+    ## adding notebook paths
+    r = re.compile(f'{path}{author}_{year}.*')
+    for nb in filter(r.match, curated_datasets):
+        s += f' [\\[curation nb\\]]({base_nb_path}{nb})'
+    for nb in filter(r.match, processed_datasets):
+        s += f' [\\[procesing nb\\]]({base_nb_path}{nb})'
 
     links.append(s)
 df['.h5ad availability'] = links
