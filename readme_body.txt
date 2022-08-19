@@ -22,7 +22,9 @@ For the basis of the table in the article, see this [spreadsheet of a subset of 
 
 Below, we curated a [table](https://raw.githubusercontent.com/theislab/sc-pert/main/data_table.csv) of perturbation datasets based on [Svensson *et al.* (2020)](https://doi.org/10.1093/database/baaa073).
 
-We also offer some datasets in a curated `.h5ad` format. These datasets have the following standardized fields in `.obs`:
+We also offer some datasets in a curated `.h5ad` format via the download links in the table below. `raw h5ad` denotes a version of the dataset that has not been filtered, normalized, or standardized.
+
+H5ads denoted as `processed` have an accompanying processing notebook, and have been similarly preprocessed. These datasets have the following standardized fields in `.obs`:
 * `perturbation_name` -- Human-readable ompound names (International non-proprietary naming where possible) for small molecules and gene names for genetic perturbations.
 * `perturbation_type` -- `small molecule` or `genetic`
 * `perturbation_value` -- A continuous covariate quantity, such as the dosage concentration or the number of hours since treatment.

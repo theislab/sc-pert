@@ -65,7 +65,7 @@ for shorthand, author, year, link in df[['Shorthand', 'Author', 'Year', 'DOI']].
     for nb in filter(r.match, curated_datasets):
         s += f' [\\[curation nb\\]]({base_nb_path}{nb})'
     for nb in filter(r.match, processed_datasets):
-        s += f' [\\[procesing nb\\]]({base_nb_path}{nb})'
+        s += f' [\\[processing nb\\]]({base_nb_path}{nb})'
 
     links.append(s)
 df['.h5ad availability'] = links
